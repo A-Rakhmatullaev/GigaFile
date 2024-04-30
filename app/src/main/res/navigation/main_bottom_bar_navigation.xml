@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_bottom_bar_navigation"
+    app:startDestination="@id/homeScreen">
+
+    <fragment
+        android:id="@+id/homeScreen"
+        android:name="com.example.gigafile.presentation.screens.home_screen.HomeScreen"
+        android:label="HomeScreen"
+        tools:layout="@layout/fragment_home"/>
+    <fragment
+        android:id="@+id/filesScreen"
+        android:name="com.example.gigafile.presentation.screens.files_screen.FilesScreen"
+        android:label="FilesScreen"
+        tools:layout="@layout/fragment_files"/>
+    <fragment
+        android:id="@+id/cloudScreen"
+        android:name="com.example.gigafile.presentation.screens.cloud_screen.CloudScreen"
+        android:label="CloudScreen"
+        tools:layout="@layout/fragment_cloud"/>
+    <fragment
+        android:id="@+id/cleanScreen"
+        android:name="com.example.gigafile.presentation.screens.clean_screen.CleanScreen"
+        android:label="CleanScreen"
+        tools:layout="@layout/fragment_clean"/>
+
+</navigation>

@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import java.util.Base64
+import java.util.UUID
 
 fun String.isEmail(): Boolean = Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
@@ -18,6 +19,10 @@ fun String.toBase64(): String = Base64.getEncoder().encodeToString(this.toByteAr
 fun String.fromBase64(): String = String(Base64.getDecoder().decode(this))
 
 fun currentTime(): Long = System.currentTimeMillis()
+
+fun randomId(): String = UUID.randomUUID().toString().replace("-", "").uppercase()
+
+fun randomId(value: String): String = UUID.fromString(value).toString().replace("-", "").uppercase()
 
 fun log(tag: String, message: Any){
     Log.d(tag, "Log: $message")
