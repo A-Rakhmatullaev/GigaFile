@@ -2,7 +2,6 @@ package com.example.gigafile.data.repositories
 
 import android.os.Environment
 import com.example.gigafile.core.extensions.log
-import com.example.gigafile.core.extensions.randomId
 import com.example.gigafile.domain.models.core.Directory
 import com.example.gigafile.domain.models.core.File
 import com.example.gigafile.domain.models.core.FileSystemElement
