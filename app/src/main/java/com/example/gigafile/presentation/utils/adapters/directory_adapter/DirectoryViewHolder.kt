@@ -6,6 +6,7 @@ import com.example.gigafile.databinding.DirectoryItemBinding
 import com.example.gigafile.domain.models.core.Directory
 import com.example.gigafile.domain.models.core.File
 import com.example.gigafile.domain.models.core.FileSystemElement
+import com.example.gigafile.domain.models.core.Storage
 import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
 import com.example.gigafile.presentation.utils.adapters.core.BaseViewHolder
 
@@ -17,11 +18,16 @@ class DirectoryViewHolder(
         // TODO: Check how to add icons for all screen sizes
         binding.name.text = item.name
         binding.size.text = item.size
+        binding.layout.setOnClickListener {
+            callback.click(item, position, binding.layout)
+        }
+
         when(item) {
             is Directory -> {
                 binding.icon.setImageResource(R.drawable.ic_test_directory)
             }
             is File -> {}
+            is Storage -> {}
         }
     }
 }

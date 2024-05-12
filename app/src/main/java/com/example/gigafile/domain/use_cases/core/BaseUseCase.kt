@@ -1,5 +1,5 @@
 package com.example.gigafile.domain.use_cases.core
 
-interface BaseUseCase {
-    suspend fun execute(vararg elements: Any): Any
+interface BaseUseCase <T, K> {
+    suspend fun execute(element: T): K
 }

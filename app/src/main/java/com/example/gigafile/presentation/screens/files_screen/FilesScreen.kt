@@ -47,21 +47,32 @@ class FilesScreen: Fragment(), BaseScreen {
         binding.recyclerView.adapter = directoryAdapter
         directoryAdapter.callback(directoryAdapterCallback)
 
-        viewModel.loadData()
+        viewModel.changeStorage("")
+        //viewModel.loadData()
     }
 
     override fun initObservers() {
+        viewModel.storageLiveData.observe(viewLifecycleOwner) { storage ->
+            log("MyLog", "Storage: $storage")
+            viewModel.changeDirectory("")
+        }
+
+        viewModel.directoryPathLiveData.observe(viewLifecycleOwner) { directoryPath ->
+            log("MyLog", "directory path: $directoryPath")
+        }
+
         viewModel.directoryLiveData.observe(viewLifecycleOwner) { data ->
+            log("MyLog", "Data size: ${data.size}")
             directoryAdapter.data(data)
             data.forEach {
-                log("MyLog", "I have: ${it.name} - ${it.size}")
+                log("MyLog", "I have: ${it.name} - ${it.size} - ${it.id}")
             }
         }
     }
 
     inner class DirectoryAdapterCallback: BaseAdapterCallback<FileSystemElement> {
         override fun click(item: FileSystemElement, position: Int, view: View) {
-            TODO("Not yet implemented")
+            viewModel.itemClicked(item)
         }
 
         override fun longClick(item: FileSystemElement, position: Int, view: View) {

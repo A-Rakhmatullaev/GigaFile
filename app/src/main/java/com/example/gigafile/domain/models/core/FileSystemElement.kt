@@ -2,9 +2,7 @@ package com.example.gigafile.domain.models.core
 
 sealed class FileSystemElement {
     abstract val id: String
-
     abstract val name: String
-
     abstract val size: String
 
     override fun hashCode(): Int {
@@ -15,6 +13,10 @@ sealed class FileSystemElement {
     override fun equals(other: Any?): Boolean {
         // TODO:
         return super.equals(other)
+    }
+
+    override fun toString(): String {
+        return "Id: $id, Name: $name, Size: $size"
     }
 }
 
