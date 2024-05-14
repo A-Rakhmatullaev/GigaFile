@@ -7,12 +7,14 @@ sealed class FileSystemElement {
 
     override fun hashCode(): Int {
         // TODO:
-        return name.hashCode()
+        return id.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
         // TODO:
-        return super.equals(other)
+        if(other is FileSystemElement && id == other.id) return true
+        if(other is FileSystemElement? && id.isNotBlank() && id == other?.id) return true
+        return false
     }
 
     override fun toString(): String {

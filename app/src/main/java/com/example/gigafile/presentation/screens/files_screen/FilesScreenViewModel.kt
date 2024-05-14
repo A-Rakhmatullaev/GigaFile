@@ -3,6 +3,7 @@ package com.example.gigafile.presentation.screens.files_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.gigafile.core.extensions.log
 import com.example.gigafile.core.extensions.pathFromList
@@ -69,6 +70,7 @@ class FilesScreenViewModel @Inject constructor(
         // depending on if it's directory or file call proper function
         // TODO: remake, just for now call changeDirectory
         // For example, you can hid this behind a use case
+        // TODO: remake, make use of ids instead of names!
         changeDirectory(DirectoryAction.ToDirectory(element.name))
     }
 
@@ -85,7 +87,6 @@ class FilesScreenViewModel @Inject constructor(
 //    }
 
     override fun onCleared() {
-        log("MyLog", "VM is cleared!")
         viewModelScope.cancel()
         super.onCleared()
     }

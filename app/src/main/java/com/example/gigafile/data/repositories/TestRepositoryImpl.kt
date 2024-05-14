@@ -53,13 +53,13 @@ class TestRepositoryImpl: TestRepository {
             trySend(listElements(java.io.File(directoryPath)))
 
             awaitClose {
-                log("MyLog", "Flow is closed!")
+                //log("MyLog", "Flow is closed!")
                 fileObserver.stopWatching()
             }
         }.onStart {
-            log("MyLog", "Flow is started")
+            //log("MyLog", "Flow is started")
         }.onCompletion {
-            log("MyLog", "Flow is completed")
+            //log("MyLog", "Flow is completed")
         }
     }
 }

@@ -13,33 +13,39 @@ class ChangeDirectoryUseCase(private val testRepository: TestRepository): BaseUs
         Pair<Flow<List<FileSystemElement>>, ArrayList<String>>> {
     override suspend fun execute(element: ChangeDirectoryUseCaseModel): Pair<Flow<List<FileSystemElement>>, ArrayList<String>> {
         if(element.storageRootPath.isNullOrBlank()) throw Exception("No root path is available!")
-        if(element.directoryAction is DirectoryAction.ToRoot)
-            return Pair(testRepository.directoryData(element.storageRootPath), arrayListOf(element.storageRootPath))
-        if(element.directoryAction is DirectoryAction.UpToPrevious) {
-            val newPath = element.directoryPath
-            newPath.removeLast()
-            return Pair(testRepository.directoryData(pathFromList(newPath)), newPath)
-        }
 
-        // TODO: remake, and remove comments
-        // return values of the directory and new current directoryPath
-        if(element.directoryPath.isEmpty()) {
-            if(element.directoryAction.directoryName.isBlank()) {
-                // retrieve values from storage root path
+        when(element.directoryAction) {
+            is DirectoryAction.ToRoot -> {
                 return Pair(testRepository.directoryData(element.storageRootPath), arrayListOf(element.storageRootPath))
-            } else {
-                // error? because there is no directoryPath but directoryName is chose
-                throw Exception("Directory name exists but no directory path is passed!")
             }
-        } else {
-            return if(element.directoryAction.directoryName.isBlank()) {
-                // retrieve values from the same directory path
-                Pair(testRepository.directoryData(pathFromList(element.directoryPath)), element.directoryPath)
-            } else {
-                // append name and path, retrieve values from this directory
+            is DirectoryAction.UpToPrevious -> {
                 val newPath = element.directoryPath
-                newPath.add(element.directoryAction.directoryName)
-                Pair(testRepository.directoryData(pathFromList(newPath)), newPath)
+                if(newPath.size > 1)
+                    newPath.removeLast()
+                return Pair(testRepository.directoryData(pathFromList(newPath)), newPath)
+            }
+            is DirectoryAction.ToDirectory -> {
+                // TODO: remake, and remove comments
+                // return values of the directory and new current directoryPath
+                if(element.directoryPath.isEmpty()) {
+                    if(element.directoryAction.directoryName.isBlank()) {
+                        // retrieve values from storage root path
+                        return Pair(testRepository.directoryData(element.storageRootPath), arrayListOf(element.storageRootPath))
+                    } else {
+                        // error? because there is no directoryPath but directoryName is chose
+                        throw Exception("Directory name exists but no directory path is passed!")
+                    }
+                } else {
+                    return if(element.directoryAction.directoryName.isBlank()) {
+                        // retrieve values from the same directory path
+                        Pair(testRepository.directoryData(pathFromList(element.directoryPath)), element.directoryPath)
+                    } else {
+                        // append name and path, retrieve values from this directory
+                        val newPath = element.directoryPath
+                        newPath.add(element.directoryAction.directoryName)
+                        Pair(testRepository.directoryData(pathFromList(newPath)), newPath)
+                    }
+                }
             }
         }
     }

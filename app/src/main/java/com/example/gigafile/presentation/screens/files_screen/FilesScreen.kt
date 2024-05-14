@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,7 +85,7 @@ class FilesScreen: Fragment(), BaseScreen {
     }
 
     override fun initObservers() {
-        viewModel.storageLiveData.observe(viewLifecycleOwner) { storage ->
+        viewModel.storageLiveData.distinctUntilChanged().observe(viewLifecycleOwner) { storage ->
             log("MyLog", "Storage: $storage")
             viewModel.changeDirectory(DirectoryAction.ToDirectory(""))
         }
@@ -95,7 +96,7 @@ class FilesScreen: Fragment(), BaseScreen {
             else binding.upButton.show()
         }
 
-        viewModel.directoryLiveData.observe(viewLifecycleOwner) { data ->
+        viewModel.directoryLiveData.distinctUntilChanged().observe(viewLifecycleOwner) { data ->
             log("MyLog", "Data size: ${data.size}")
             directoryAdapter.data(data)
 //            data.forEach {
