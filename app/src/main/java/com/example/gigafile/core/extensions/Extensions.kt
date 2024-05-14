@@ -24,6 +24,10 @@ fun randomId(): String = UUID.randomUUID().toString().replace("-", "").uppercase
 
 fun randomId(value: String): String = UUID.fromString(value).toString().replace("-", "").uppercase()
 
+fun pathFromList(path: ArrayList<String>): String {
+    return path.reduce { acc, s -> "$acc/$s" }
+}
+
 fun log(tag: String, message: Any){
     Log.d(tag, "Log: $message")
 }

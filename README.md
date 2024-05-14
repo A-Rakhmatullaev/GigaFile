@@ -1,6 +1,12 @@
 App: GigaFile
 Members: Akbarbek Rakhmatullaev
 
+Things done for Checkpoint 3:
+- Added custom class that extends from abstract FileObserver
+- Real-time creation/renaming/deletion/etc. of files and folders
+- Open a root directory by clicking twice on 'Files' button
+- Back button that pops-up when entered into a new directory
+
 List of features needed for the MVP + Breakdown of tasks:
 - Display all possible* files and directories on chosen storage
 - Modify these files and directories: rename, delete, move etc.
