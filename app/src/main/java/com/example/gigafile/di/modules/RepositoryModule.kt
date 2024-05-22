@@ -1,7 +1,7 @@
 package com.example.gigafile.di.modules
 
-import com.example.gigafile.data.repositories.TestRepositoryImpl
-import com.example.gigafile.domain.repositories.TestRepository
+import com.example.gigafile.data.repositories.FileSystemRepositoryImpl
+import com.example.gigafile.domain.repositories.FileSystemRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideTestRepository(): TestRepository = TestRepositoryImpl()
+    fun provideTestRepository(): FileSystemRepository = FileSystemRepositoryImpl()
 }

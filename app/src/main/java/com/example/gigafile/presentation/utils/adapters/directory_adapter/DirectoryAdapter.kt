@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gigafile.R
 import com.example.gigafile.databinding.DirectoryItemBinding
-import com.example.gigafile.domain.models.core.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
 import com.example.gigafile.presentation.utils.adapters.core.BaseAdapter
 import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
 

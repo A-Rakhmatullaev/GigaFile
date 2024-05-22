@@ -1,7 +1,7 @@
 package com.example.gigafile.presentation.utils.adapters.directory_adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.gigafile.domain.models.core.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
 
 class DirectoryDiffUtil(
     private val oldDirectories: List<FileSystemElement>,

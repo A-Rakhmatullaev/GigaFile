@@ -5,4 +5,6 @@
     <string name="files">Files</string>
     <string name="cloud">Cloud</string>
     <string name="clean">Clean</string>
+
+    <string name="create_folder">Create a new folder</string>
 </resources>

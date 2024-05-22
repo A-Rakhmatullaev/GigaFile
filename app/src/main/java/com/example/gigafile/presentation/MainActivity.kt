@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gigafile.core.bases.BaseScreen
-import com.example.gigafile.core.extensions.log
 import com.example.gigafile.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

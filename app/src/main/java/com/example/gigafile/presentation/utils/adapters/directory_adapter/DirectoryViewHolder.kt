@@ -3,10 +3,10 @@ package com.example.gigafile.presentation.utils.adapters.directory_adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gigafile.R
 import com.example.gigafile.databinding.DirectoryItemBinding
-import com.example.gigafile.domain.models.core.Directory
-import com.example.gigafile.domain.models.core.File
-import com.example.gigafile.domain.models.core.FileSystemElement
-import com.example.gigafile.domain.models.core.Storage
+import com.example.gigafile.domain.models.core.file_system.Directory
+import com.example.gigafile.domain.models.core.file_system.File
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.Storage
 import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
 import com.example.gigafile.presentation.utils.adapters.core.BaseViewHolder
 
@@ -24,9 +24,11 @@ class DirectoryViewHolder(
 
         when(item) {
             is Directory -> {
-                binding.icon.setImageResource(R.drawable.ic_test_directory)
+                binding.icon.setImageResource(R.drawable.ic_directory)
             }
-            is File -> {}
+            is File -> {
+                binding.icon.setImageResource(R.drawable.ic_file)
+            }
             is Storage -> {}
         }
     }

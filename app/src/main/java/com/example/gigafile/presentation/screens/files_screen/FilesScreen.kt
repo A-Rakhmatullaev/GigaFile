@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.distinctUntilChanged
@@ -14,8 +15,10 @@ import com.example.gigafile.core.bases.BaseScreen
 import com.example.gigafile.core.extensions.hide
 import com.example.gigafile.core.extensions.log
 import com.example.gigafile.core.extensions.show
+import com.example.gigafile.core.extensions.snackBar
+import com.example.gigafile.core.extensions.toast
 import com.example.gigafile.databinding.FragmentFilesBinding
-import com.example.gigafile.domain.models.core.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
 import com.example.gigafile.domain.models.use_case_models.DirectoryAction
 import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
 import com.example.gigafile.presentation.utils.adapters.directory_adapter.DirectoryAdapter
@@ -80,8 +83,11 @@ class FilesScreen: Fragment(), BaseScreen {
             viewModel.changeDirectory(DirectoryAction.UpToPrevious(""))
         }
 
+        binding.addButton.setOnClickListener {
+            viewModel.addDirectory("Some name")
+        }
+
         viewModel.changeStorage("")
-        //viewModel.loadData()
     }
 
     override fun initObservers() {
@@ -102,6 +108,10 @@ class FilesScreen: Fragment(), BaseScreen {
 //            data.forEach {
 //                log("MyLog", "I have: ${it.name} - ${it.size} - ${it.id}")
 //            }
+        }
+
+        viewModel.repositoryNotificationLiveData.observe(viewLifecycleOwner) { message ->
+            this.binding.root.toast(message)
         }
     }
 

@@ -7,16 +7,17 @@ import com.example.gigafile.core.extensions.log
 import com.example.gigafile.data.local.models.DirectoryObserverV26ToV28
 import com.example.gigafile.data.local.models.DirectoryObserverV29
 import com.example.gigafile.data.local.models.listElements
-import com.example.gigafile.domain.models.core.FileSystemElement
-import com.example.gigafile.domain.models.core.Storage
-import com.example.gigafile.domain.repositories.TestRepository
+import com.example.gigafile.domain.models.core.BaseResult
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.Storage
+import com.example.gigafile.domain.repositories.FileSystemRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 
-class TestRepositoryImpl: TestRepository {
+class FileSystemRepositoryImpl: FileSystemRepository {
     override suspend fun storage(storageId: String): Storage {
         // TODO: remake, because now it pretends to be automated, but just returns internal storage
         // pretend to search from a database (table of storages), and you have automated storage checker,
@@ -33,7 +34,6 @@ class TestRepositoryImpl: TestRepository {
     // TODO: check edge cases:
     // - when directory itself is moved/delete/renamed etc.
     override suspend fun directoryData(directoryPath: String): Flow<List<FileSystemElement>> {
-
         return callbackFlow {
             val action: (List<FileSystemElement>) -> Unit = {
                 trySend(it)
@@ -60,6 +60,19 @@ class TestRepositoryImpl: TestRepository {
             //log("MyLog", "Flow is started")
         }.onCompletion {
             //log("MyLog", "Flow is completed")
+        }
+    }
+
+    override suspend fun addDirectory(directoryPath: String): BaseResult<String, String> {
+        val newDirectory = java.io.File(directoryPath)
+        // Create the directory if it doesn't exist
+        return if (!newDirectory.exists()) {
+            newDirectory.mkdirs() // Returns true if successful, false otherwise
+            log("MyLog", "Created directory! - $directoryPath")
+            BaseResult.Success("Folder created")
+        } else {
+            log("MyLog", "Could not create directory")
+            BaseResult.Error("Folder already exists")
         }
     }
 }

@@ -3,10 +3,11 @@ package com.example.gigafile.data.local.models
 import android.os.Build
 import android.os.FileObserver
 import androidx.annotation.RequiresApi
+import com.example.gigafile.core.extensions.generateTempId
 import com.example.gigafile.core.extensions.log
-import com.example.gigafile.domain.models.core.Directory
-import com.example.gigafile.domain.models.core.File
-import com.example.gigafile.domain.models.core.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.Directory
+import com.example.gigafile.domain.models.core.file_system.File
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
 
 class DirectoryObserverV26ToV28(
     private val directoryPath: String,
@@ -62,12 +63,12 @@ fun listElements(directory: java.io.File): List<FileSystemElement> {
                     this.add(
                         if(it.isDirectory) Directory(
                             // TODO: Use randomID() or any other smarter implementation
-                            it.absolutePath + it.extension + it.toURI().toString(),
+                            it.generateTempId(),
                             it.name,
                             "${it.length()} Bytes",
                             "${it.listFiles()?.size ?: 0}")
                         else File(
-                            it.absolutePath,
+                            it.generateTempId(),
                             it.name,
                             "${it.length()} Bytes")
                     )

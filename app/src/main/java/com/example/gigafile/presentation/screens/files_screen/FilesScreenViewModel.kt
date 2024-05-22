@@ -3,18 +3,22 @@ package com.example.gigafile.presentation.screens.files_screen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.gigafile.core.extensions.log
 import com.example.gigafile.core.extensions.pathFromList
-import com.example.gigafile.domain.models.core.FileSystemElement
-import com.example.gigafile.domain.models.core.Storage
+import com.example.gigafile.domain.models.core.file_system.Directory
+import com.example.gigafile.domain.models.core.file_system.File
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.Storage
+import com.example.gigafile.domain.models.use_case_models.AddDirectoryUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.ChangeDirectoryUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.ChangeStorageUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.DirectoryAction
-import com.example.gigafile.domain.repositories.TestRepository
+import com.example.gigafile.domain.repositories.FileSystemRepository
+import com.example.gigafile.domain.use_cases.AddDirectoryUseCase
 import com.example.gigafile.domain.use_cases.ChangeDirectoryUseCase
 import com.example.gigafile.domain.use_cases.ChangeStorageUseCase
+import com.example.gigafile.presentation.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,13 +28,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FilesScreenViewModel @Inject constructor(
-    private val testRepository: TestRepository
+    private val fileSystemRepository: FileSystemRepository
 ): ViewModel() {
     private val storageData = MutableLiveData<Storage>()
     val storageLiveData = storageData as LiveData<Storage>
 
     private val directoryPathData = MutableLiveData(arrayListOf<String>())
     val directoryPathLiveData = directoryPathData as LiveData<ArrayList<String>>
+
+    private val repositoryNotificationData = SingleLiveEvent<String>()
+    val repositoryNotificationLiveData = repositoryNotificationData as LiveData<String>
 
     private var dataFlowJob: Job? = null
 
@@ -39,7 +46,7 @@ class FilesScreenViewModel @Inject constructor(
 
     fun changeStorage(storageId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            storageData.postValue(ChangeStorageUseCase(testRepository).execute(
+            storageData.postValue(ChangeStorageUseCase(fileSystemRepository).execute(
                 ChangeStorageUseCaseModel(storageId, storageData.value)
             ))
         }
@@ -49,7 +56,7 @@ class FilesScreenViewModel @Inject constructor(
         dataFlowJob?.cancel()
 
         dataFlowJob = viewModelScope.launch(Dispatchers.Default) {
-            val job = ChangeDirectoryUseCase(testRepository).execute(
+            val job = ChangeDirectoryUseCase(fileSystemRepository).execute(
                 ChangeDirectoryUseCaseModel(
                     directoryAction,
                     directoryPathData.value ?: arrayListOf(),
@@ -61,7 +68,20 @@ class FilesScreenViewModel @Inject constructor(
 
             job.first.collect {
                 directoryData.postValue(it)
+                log("MyLog", "Dir in VM: ${directoryPathData.value}")
             }
+        }
+    }
+
+    fun addDirectory(directoryName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            log("MyLog", "VM old path: ${directoryPathData.value}")
+//            val notify: (message: String) -> Unit = {
+//                repositoryNotificationData.postValue(it)
+//            }
+            repositoryNotificationData.postValue(AddDirectoryUseCase(fileSystemRepository).execute(AddDirectoryUseCaseModel(
+                directoryName, directoryPathData.value ?: arrayListOf()
+            )))
         }
     }
 
@@ -71,7 +91,15 @@ class FilesScreenViewModel @Inject constructor(
         // TODO: remake, just for now call changeDirectory
         // For example, you can hid this behind a use case
         // TODO: remake, make use of ids instead of names!
-        changeDirectory(DirectoryAction.ToDirectory(element.name))
+        when(element) {
+            is Directory -> {
+                changeDirectory(DirectoryAction.ToDirectory(element.name))
+            }
+            is File -> {
+                log("MyLog", "Open file ${element.name}")
+            }
+            is Storage -> {}
+        }
     }
 
     fun currentDirectoryIsRoot(): Boolean {
@@ -79,12 +107,6 @@ class FilesScreenViewModel @Inject constructor(
                 (directoryPathData.value != null) &&
                 (storageData.value?.rootDirectoryPath == pathFromList(directoryPathData.value ?: arrayListOf()))
     }
-
-//    fun loadData() {
-//        viewModelScope.launch(Dispatchers.Default) {
-//            directoryData.postValue(TestUseCase(testRepository).execute(Unit))
-//        }
-//    }
 
     override fun onCleared() {
         viewModelScope.cancel()

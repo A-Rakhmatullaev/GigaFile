@@ -1,12 +1,12 @@
 package com.example.gigafile.core.extensions
 
-import android.app.Activity
 import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
 import java.util.Base64
 import java.util.UUID
 
@@ -74,10 +74,13 @@ fun View.disable(){
     isClickable = false
 }
 
-fun Activity.toast(message: Any){
-    Toast.makeText(this, message.toString(), Toast.LENGTH_SHORT).show()
+fun View.toast(message: Any){
+    Toast.makeText(this.context, message.toString(), Toast.LENGTH_SHORT).show()
 }
 
-fun Activity.snackBar(message: Any){
-    Snackbar.make(this, findViewById(android.R.id.content), message.toString(), Snackbar.LENGTH_SHORT).show()
+fun View.snackBar(message: Any){
+    Snackbar.make(this.context, this.findViewById(android.R.id.content), message.toString(), Snackbar.LENGTH_SHORT).show()
 }
+
+// TODO: Change
+fun File.generateTempId() = this.absolutePath + this.extension + this.toURI().toString()

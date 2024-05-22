@@ -1,4 +1,4 @@
-package com.example.gigafile.domain.models.core
+package com.example.gigafile.domain.models.core.file_system
 
 class Directory(
     override val id: String,
