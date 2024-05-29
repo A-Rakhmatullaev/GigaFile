@@ -12,7 +12,7 @@ import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
 
 class DirectoryAdapter : RecyclerView.Adapter<DirectoryViewHolder>(), BaseAdapter<FileSystemElement> {
     private var directories: List<FileSystemElement> = listOf()
-    private lateinit var callback: BaseAdapterCallback<FileSystemElement>
+    private lateinit var callback: DirectoryAdapterCallback<FileSystemElement>
 
     private lateinit var diffUtil: DiffUtil.Callback
     private lateinit var diffResult: DiffUtil.DiffResult
@@ -39,6 +39,6 @@ class DirectoryAdapter : RecyclerView.Adapter<DirectoryViewHolder>(), BaseAdapte
     override fun data(): Collection<FileSystemElement> = directories
 
     override fun callback(callback: BaseAdapterCallback<FileSystemElement>) {
-        this.callback = callback
+        this.callback = callback as DirectoryAdapterCallback<FileSystemElement>
     }
 }

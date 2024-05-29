@@ -18,8 +18,10 @@ import com.example.gigafile.core.extensions.toast
 import com.example.gigafile.databinding.FragmentFilesBinding
 import com.example.gigafile.domain.models.core.file_system.FileSystemElement
 import com.example.gigafile.domain.models.use_case_models.DirectoryAction
-import com.example.gigafile.presentation.utils.adapters.core.BaseAdapterCallback
+import com.example.gigafile.presentation.utils.FilesOnActionModeItemClickCallback
 import com.example.gigafile.presentation.utils.adapters.directory_adapter.DirectoryAdapter
+import com.example.gigafile.presentation.utils.adapters.directory_adapter.DirectoryAdapterCallback
+import com.example.gigafile.presentation.utils.startFilesPrimaryActionMode
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +33,10 @@ class FilesScreen: Fragment(), BaseScreen {
     private var currentDestinationId: String = ""
 
     private val directoryAdapter = DirectoryAdapter()
-    private val directoryAdapterCallback = DirectoryAdapterCallback()
+    private val directoryAdapterCallbackImpl = DirectoryAdapterCallbackImpl()
+    private val popupMenuActions = PopupActions()
+    private val filesBottomSheet = FilesBottomSheetImpl()
+    private val fileActionModeCallback = FilesOnActionModeItemClickCallbackImpl()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +79,7 @@ class FilesScreen: Fragment(), BaseScreen {
             false
         )
         binding.recyclerView.adapter = directoryAdapter
-        directoryAdapter.callback(directoryAdapterCallback)
+        directoryAdapter.callback(directoryAdapterCallbackImpl)
 
         binding.upButton.hide()
         binding.upButton.setOnClickListener {
@@ -82,7 +87,9 @@ class FilesScreen: Fragment(), BaseScreen {
         }
 
         binding.addButton.setOnClickListener {
-            viewModel.addDirectory("Some name")
+            filesBottomSheet.showBottomSheet(FilesBottomSheetTypes.CREATE, childFragmentManager, Unit) { name: String ->
+                viewModel.addDirectory(name)
+            }
         }
 
         viewModel.changeStorage("")
@@ -103,13 +110,13 @@ class FilesScreen: Fragment(), BaseScreen {
         viewModel.directoryLiveData.distinctUntilChanged().observe(viewLifecycleOwner) { data ->
             log("MyLog", "Data size: ${data.size}")
             directoryAdapter.data(data)
-//            data.forEach {
-//                log("MyLog", "I have: ${it.name} - ${it.size} - ${it.id}")
-//            }
         }
 
         viewModel.repositoryNotificationLiveData.observe(viewLifecycleOwner) { message ->
             this.binding.root.toast(message)
+            // TODO: Remake? Or create separate VM per bottom sheet or (better),
+            // create a livedata to track their states, or (better) that gets triggered and closes sheets
+            closeBottomSheet()
         }
     }
 
@@ -119,13 +126,67 @@ class FilesScreen: Fragment(), BaseScreen {
         navController.removeOnDestinationChangedListener(destinationChangeListener)
     }
 
-    inner class DirectoryAdapterCallback: BaseAdapterCallback<FileSystemElement> {
+    private fun closeBottomSheet() {
+        filesBottomSheet.closeBottomSheet()
+    }
+
+    inner class DirectoryAdapterCallbackImpl: DirectoryAdapterCallback<FileSystemElement> {
         override fun click(item: FileSystemElement, position: Int, view: View) {
             viewModel.onElementClicked(item)
         }
 
         override fun longClick(item: FileSystemElement, position: Int, view: View) {
-            TODO("Not yet implemented")
+            log("MyLog", "long click: ${item.name}")
+            view.startFilesPrimaryActionMode("Hide file?", item.name, item, callback = fileActionModeCallback)
         }
+
+        override fun actionClick(item: FileSystemElement, position: Int, view: View) {
+            showFilesScreenPopupMenu(view, item, popupMenuActions)
+        }
+    }
+
+    inner class PopupActions: FilesScreenPopupMenuActions {
+        override fun edit(element: FileSystemElement) {
+            log("MyLog","RR: ${element.name}")
+            filesBottomSheet.showBottomSheet(FilesBottomSheetTypes.EDIT, childFragmentManager, element) { newName: String ->
+                viewModel.editElement(element, newName)
+            }
+        }
+
+        override fun copy(element: FileSystemElement) {
+
+        }
+
+        override fun cut(element: FileSystemElement) {
+
+        }
+
+        override fun moveToFolder(element: FileSystemElement) {
+
+        }
+
+        override fun compress(element: FileSystemElement) {
+
+        }
+
+        override fun delete(element: FileSystemElement) {
+            filesBottomSheet.showBottomSheet(FilesBottomSheetTypes.DELETE, childFragmentManager, element) { name: String ->
+                viewModel.deleteElement(element)
+            }
+        }
+
+        override fun info(element: FileSystemElement) {
+
+        }
+    }
+
+    inner class FilesOnActionModeItemClickCallbackImpl: FilesOnActionModeItemClickCallback {
+        override fun hide(element: FileSystemElement) {
+            log("MyLog", "hide: ${element.name}")
+        }
+
+//        override fun delete() {
+//            log("MyLog", "delete")
+//        }
     }
 }

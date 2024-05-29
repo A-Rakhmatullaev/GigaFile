@@ -1,6 +1,6 @@
 package com.example.gigafile.di.modules
 
-import com.example.gigafile.data.repositories.FileSystemRepositoryImpl
+import com.example.gigafile.data.repositories.LocalFileSystemRepositoryImpl
 import com.example.gigafile.domain.repositories.FileSystemRepository
 import dagger.Module
 import dagger.Provides
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideTestRepository(): FileSystemRepository = FileSystemRepositoryImpl()
+    fun provideTestRepository(): FileSystemRepository = LocalFileSystemRepositoryImpl()
 }

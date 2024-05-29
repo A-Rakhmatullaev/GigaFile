@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:navGraph="@navigation/main_bottom_bar_navigation" />
+        app:navGraph="@navigation/main_bottom_bar_navigation"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:foregroundGravity="bottom"
         app:menu="@menu/bottom_navigation_menu"
-        app:labelVisibilityMode="labeled" />
+        app:labelVisibilityMode="labeled"/>
 
 </LinearLayout>

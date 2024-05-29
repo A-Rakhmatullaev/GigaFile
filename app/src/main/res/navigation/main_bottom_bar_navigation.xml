@@ -14,7 +14,12 @@
         android:id="@+id/filesScreen"
         android:name="com.example.gigafile.presentation.screens.files_screen.FilesScreen"
         android:label="FilesScreen"
-        tools:layout="@layout/fragment_files"/>
+        tools:layout="@layout/fragment_files">
+<!--        <argument-->
+<!--            android:name="purpose"-->
+<!--            app:argType="com.example.gigafile.presentation.screens.files_screen.FileScreenPurpose"-->
+<!--            android:defaultValue="REGULAR"/>-->
+    </fragment>
     <fragment
         android:id="@+id/cloudScreen"
         android:name="com.example.gigafile.presentation.screens.cloud_screen.CloudScreen"

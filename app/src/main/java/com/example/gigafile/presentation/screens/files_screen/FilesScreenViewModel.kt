@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gigafile.core.extensions.isSystemFile
 import com.example.gigafile.core.extensions.log
 import com.example.gigafile.core.extensions.pathFromList
 import com.example.gigafile.domain.models.core.file_system.Directory
@@ -13,11 +14,15 @@ import com.example.gigafile.domain.models.core.file_system.Storage
 import com.example.gigafile.domain.models.use_case_models.AddDirectoryUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.ChangeDirectoryUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.ChangeStorageUseCaseModel
+import com.example.gigafile.domain.models.use_case_models.DeleteElementUseCaseModel
 import com.example.gigafile.domain.models.use_case_models.DirectoryAction
+import com.example.gigafile.domain.models.use_case_models.EditElementUseCaseModel
 import com.example.gigafile.domain.repositories.FileSystemRepository
 import com.example.gigafile.domain.use_cases.AddDirectoryUseCase
 import com.example.gigafile.domain.use_cases.ChangeDirectoryUseCase
 import com.example.gigafile.domain.use_cases.ChangeStorageUseCase
+import com.example.gigafile.domain.use_cases.DeleteElementUseCase
+import com.example.gigafile.domain.use_cases.EditElementUseCase
 import com.example.gigafile.presentation.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +73,6 @@ class FilesScreenViewModel @Inject constructor(
 
             job.first.collect {
                 directoryData.postValue(it)
-                log("MyLog", "Dir in VM: ${directoryPathData.value}")
             }
         }
     }
@@ -99,6 +103,35 @@ class FilesScreenViewModel @Inject constructor(
                 log("MyLog", "Open file ${element.name}")
             }
             is Storage -> {}
+        }
+    }
+
+    // TODO: For all these functions, also pass ID
+    fun editElement(element: FileSystemElement, newName: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryNotificationData.postValue(EditElementUseCase(fileSystemRepository).execute(
+                EditElementUseCaseModel(element, directoryPathData.value ?: arrayListOf(), newName)
+            ))
+        }
+    }
+
+    fun copyElement(name: String) {
+        log("MyLog", "copy")
+    }
+
+    fun moveElementToFolder() {
+        log("MyLog", "move to folder")
+    }
+
+    fun compressElement() {
+        log("MyLog", "compress")
+    }
+
+    fun deleteElement(element: FileSystemElement) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryNotificationData.postValue(DeleteElementUseCase(fileSystemRepository).execute(
+                DeleteElementUseCaseModel(element, directoryPathData.value ?: arrayListOf())
+            ))
         }
     }
 

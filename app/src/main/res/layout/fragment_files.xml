@@ -19,7 +19,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addButton"
@@ -30,7 +30,7 @@
             app:useCompatPadding="true"
             android:src="@drawable/ic_add"
             android:layout_margin="8dp"
-            android:contentDescription="@string/create_folder" />
+            android:contentDescription="@string/create_folder"/>
 
     </FrameLayout>
 

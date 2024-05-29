@@ -2,11 +2,17 @@ package com.example.gigafile.core.extensions
 
 import android.util.Log
 import android.util.Patterns
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.channels.FileLock
+import java.nio.channels.OverlappingFileLockException
 import java.util.Base64
 import java.util.UUID
 
@@ -80,6 +86,79 @@ fun View.toast(message: Any){
 
 fun View.snackBar(message: Any){
     Snackbar.make(this.context, this.findViewById(android.R.id.content), message.toString(), Snackbar.LENGTH_SHORT).show()
+}
+
+fun showPopupMenu(
+    anchor: View?,
+    menuRes: Int,
+    listener: (menuItem: MenuItem) -> Boolean
+) {
+    if(anchor == null) return
+    val popupMenu = PopupMenu(anchor.context, anchor)
+    popupMenu.menuInflater.inflate(menuRes, popupMenu.menu)
+    popupMenu.setOnMenuItemClickListener(listener)
+
+    popupMenu.setForceShowIcon(true)
+    popupMenu.show()
+}
+
+fun File.isSystemFile() = !(canRead() || canWrite())
+
+fun File.containsSystemFile(): Boolean {
+    if(isDirectory) {
+        walkTopDown().forEach { file ->
+            // Check if file is system
+            // If even one of its sub-files is system file, file is considered system as well
+            if(file.isSystemFile()) return true
+        }
+    }
+    return false
+}
+
+/**
+ * Optimized version of File.containsSystemFile()
+ *
+ * Be cautious using, it must be used only with files that are directories
+ */
+fun File.directoryContainsSystemFile(): Boolean {
+    return walkTopDown().any { file ->
+        !(file.canRead() || file.canWrite())
+    }
+//    walkTopDown().forEach { file ->
+//        // Check if file is system
+//        // If even one of its sub-files is system file, file is considered system as well
+//        if(!(file.canRead() || file.canWrite())) return true
+//    }
+    //return false
+}
+
+fun File.isFileInUse(): Boolean {
+    var fis: FileInputStream? = null
+    var fos: FileOutputStream? = null
+    var lock: FileLock? = null
+
+    return try {
+        if (exists()) {
+            // Attempt to lock the file for reading
+            fis = FileInputStream(this)
+            lock = fis.channel.tryLock(0L, Long.MAX_VALUE, true)
+        } else {
+            // Attempt to lock the file for writing
+            fos = FileOutputStream(this, true)
+            lock = fos.channel.tryLock()
+        }
+        lock == null
+    } catch (e: OverlappingFileLockException) {
+        // File is being used by another process
+        true
+    } catch (e: Exception) {
+        // Other IO exceptions
+        false
+    } finally {
+        lock?.release()
+        fis?.close()
+        fos?.close()
+    }
 }
 
 // TODO: Change

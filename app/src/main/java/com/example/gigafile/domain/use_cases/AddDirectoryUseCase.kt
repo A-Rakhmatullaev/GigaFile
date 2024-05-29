@@ -11,6 +11,8 @@ class AddDirectoryUseCase(private val fileSystemRepository: FileSystemRepository
         if(element.directoryPath.isEmpty()) return "Directory path is empty"
         if(element.directoryName.isBlank()) return "Directory name is empty"
 
+        // TODO: Add checking for number of characters in a name
+
         val newPath = arrayListOf<String>().apply {
             addAll(element.directoryPath)
         }

@@ -26,7 +26,7 @@ class ChangeDirectoryUseCase(private val fileSystemRepository: FileSystemReposit
             }
             is DirectoryAction.ToDirectory -> {
                 // TODO: remake, and remove comments
-                // return values of the directory and new current directoryPath
+                //  return values of the directory and new current directoryPath
                 if(element.directoryPath.isEmpty()) {
                     if(element.directoryAction.directoryName.isBlank()) {
                         // retrieve values from storage root path
