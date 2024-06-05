@@ -47,6 +47,12 @@ class ChangeDirectoryUseCase(private val fileSystemRepository: FileSystemReposit
                     }
                 }
             }
+            is DirectoryAction.ToHiddenDirectory -> {
+                // element.directoryAction.directoryName is actually a directoryPath
+                if(element.directoryAction.directoryName.isBlank()) throw Exception("No internal file, app isn't installed")
+                // TODO: Remake extension function, that creates arraylist from string, and puts its value as first value
+                return Pair(fileSystemRepository.directoryData(element.directoryAction.directoryName), arrayListOf<String>().apply { add(element.directoryAction.directoryName) } )
+            }
         }
     }
 }

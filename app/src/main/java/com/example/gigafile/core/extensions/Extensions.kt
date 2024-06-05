@@ -121,15 +121,9 @@ fun File.containsSystemFile(): Boolean {
  * Be cautious using, it must be used only with files that are directories
  */
 fun File.directoryContainsSystemFile(): Boolean {
-    return walkTopDown().any { file ->
+    return walkTopDown().maxDepth(1).any { file ->
         !(file.canRead() || file.canWrite())
     }
-//    walkTopDown().forEach { file ->
-//        // Check if file is system
-//        // If even one of its sub-files is system file, file is considered system as well
-//        if(!(file.canRead() || file.canWrite())) return true
-//    }
-    //return false
 }
 
 fun File.isFileInUse(): Boolean {

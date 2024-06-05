@@ -10,4 +10,5 @@ sealed class DirectoryAction(val directoryName: String) {
     class ToDirectory(directoryName: String): DirectoryAction(directoryName)
     class UpToPrevious(directoryName: String): DirectoryAction(directoryName)
     class ToRoot(directoryName: String): DirectoryAction(directoryName)
+    class ToHiddenDirectory(directoryPath: String): DirectoryAction(directoryPath)
 }
