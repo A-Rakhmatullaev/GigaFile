@@ -5,10 +5,10 @@
 ## Members: Akbarbek Rakhmatullaev
 
 ### Does it accomplish the stated objective?
-- Objective was to create an open-source file manager native to Android OS and learn from that process. Basic main functions of the file manager were implemented and newly learned concepts were applied
+- Yes, as objective was to create an open-source file manager native to Android OS and learn from that process. Basic main functions of the file manager were implemented and newly learned concepts were applied
 
 ### Does it deliver on the “value proposition”?
-- Value was that file manager will be open-source and complement features that other file managers lacked. Since it was really hard to find new features to implement in a file manager (there are countless file managers available on the market, and each contributed in its own way), I came up with only a new addition that would not allow users to delete or modify folders containing system files (such as 'Android' folder), unlike other file managers. Also, this project is completely open-source. However, connection to a cloud storages was not implemented due to the time constraints, and I decided to focus more on working with local internal files
+- Yes, as value was that file manager will be open-source and complement features that other file managers lacked. Since it was really hard to find new features to implement in a file manager (there are countless file managers available on the market, and each contributed in its own way), I came up with only a new addition that would not allow users to delete or modify folders containing system files (such as 'Android' folder), unlike other file managers. Also, this project is completely open-source. However, connection to a cloud storages was not implemented due to the time constraints, and I decided to focus more on working with local internal files
 
 ### Does it respect user privacy/is it secure?
 - Yes, app is secure to use, it uses obfuscation of its code by default. Also, no user-sensitive data is collected or being stored.
