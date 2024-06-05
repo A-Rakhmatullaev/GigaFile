@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="GigaSelectableItemTheme">
+        <item name="colorControlHighlight">@color/giga_secondary</item>
+    </style>
+
+
+    <style name="GigaSelectableItemBackground">
+        <item name="android:theme">@style/GigaSelectableItemTheme</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
+
+</resources>

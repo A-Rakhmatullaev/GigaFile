@@ -1,0 +1,41 @@
+package com.example.gigafile.presentation.utils.adapters.directory_adapter
+
+import androidx.recyclerview.widget.RecyclerView
+import com.example.gigafile.R
+import com.example.gigafile.databinding.DirectoryItemBinding
+import com.example.gigafile.domain.models.core.file_system.Directory
+import com.example.gigafile.domain.models.core.file_system.File
+import com.example.gigafile.domain.models.core.file_system.FileSystemElement
+import com.example.gigafile.domain.models.core.file_system.Storage
+import com.example.gigafile.presentation.utils.adapters.core.BaseViewHolder
+
+class DirectoryViewHolder(
+    private val binding: DirectoryItemBinding,
+    private val callback: DirectoryAdapterCallback<FileSystemElement>
+): RecyclerView.ViewHolder(binding.root), BaseViewHolder<FileSystemElement> {
+    override fun bind(item: FileSystemElement, position: Int, vararg values: Any) {
+        // TODO: Check how to add icons for all screen sizes
+        binding.name.text = item.name
+        binding.size.text = item.size
+        binding.layout.setOnClickListener {
+            callback.click(item, position, binding.layout)
+        }
+        binding.layout.setOnLongClickListener {
+            callback.longClick(item, position, binding.layout)
+            true
+        }
+        binding.actionButton.setOnClickListener {
+            callback.actionClick(item, position, binding.actionButton)
+        }
+
+        when(item) {
+            is Directory -> {
+                binding.icon.setImageResource(R.drawable.ic_directory)
+            }
+            is File -> {
+                binding.icon.setImageResource(R.drawable.ic_file)
+            }
+            is Storage -> {}
+        }
+    }
+}

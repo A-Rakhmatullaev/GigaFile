@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeScreen"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/filesScreen"
+        android:icon="@drawable/ic_directory"
+        android:title="@string/files" />
+
+    <item
+        android:id="@+id/cloudScreen"
+        android:icon="@drawable/ic_cloud"
+        android:title="@string/cloud" />
+
+    <item
+        android:id="@+id/cleanScreen"
+        android:icon="@drawable/ic_clean"
+        android:title="@string/clean" />
+</menu>
